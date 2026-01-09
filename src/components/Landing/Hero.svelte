@@ -16,6 +16,7 @@
 
 <style lang="scss">
 	.hero {
+		padding: 4rem 0;
 		background-color: var(--secondary);
 		color: var(--white);
 	}
