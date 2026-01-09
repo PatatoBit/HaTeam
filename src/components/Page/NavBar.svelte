@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<div class="tabs">
 			<a href="/">ลงอีเวนท์ใหม่</a>
-			<a href="/">ค้นหา</a>
+			<a href="/" class="active">ค้นหา</a>
 			<a href="/">แชท</a>
 		</div>
 	</div>
@@ -26,6 +26,10 @@
 	a {
 		text-decoration: none;
 		color: inherit;
-		font-weight: 600;
+		font-weight: 400;
+
+		&.active {
+			font-weight: 600;
+		}
 	}
 </style>
