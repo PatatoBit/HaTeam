@@ -17,10 +17,16 @@
 		align-items: center;
 	}
 
+	.wrapper {
+		width: 100%;
+	}
+
 	.tabs {
-		display: flex;
-		flex-direction: row;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		width: 100%;
 		gap: 2.5rem;
+		align-items: center;
 	}
 
 	a {
@@ -30,6 +36,14 @@
 
 		&.active {
 			font-weight: 600;
+		}
+
+		&:first-child {
+			justify-self: end;
+		}
+
+		&:last-child {
+			justify-self: start;
 		}
 	}
 </style>
