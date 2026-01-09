@@ -24,6 +24,12 @@
 		margin-top: 1rem;
 	}
 
+	@media (max-width: 768px) {
+		.nearby-posts {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
 	.post-image {
 		width: 100%;
 		height: auto;
