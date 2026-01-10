@@ -1,4 +1,6 @@
 <script>
+	import { supabase } from '$lib/supabaseClient';
+
 	let userInput = {
 		image: null,
 		title: '',
@@ -12,6 +14,22 @@
 		age_restriction_enabled: false,
 		min_age: null,
 		max_age: null
+	};
+
+	const handleSubmit = () => {
+		// Handle form submission logic here
+		console.log('Form submitted with data:', userInput);
+
+		supabase.functions
+			.invoke('hello-world', {
+				body: JSON.stringify({ name: 'SvelteKit User' })
+			})
+			.then((response) => {
+				console.log('Function response:', response);
+			})
+			.catch((error) => {
+				console.error('Function error:', error);
+			});
 	};
 </script>
 
@@ -51,7 +69,12 @@
 		</div>
 
 		<div class="input-section">
-			<input type="submit" class="submit-btn" value="ลงงานใหม่" />
+			<input
+				type="submit"
+				class="submit-btn"
+				value="ลงงานใหม่"
+				onclick={async () => await handleSubmit()}
+			/>
 		</div>
 	</div>
 
