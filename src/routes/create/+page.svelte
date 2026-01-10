@@ -1,28 +1,33 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
 
+	let fee_enabled = false;
+	let age_restriction_enabled = false;
+
 	let userInput = {
 		image: null,
-		title: '',
-		link: '',
-		open_at: new Date().toISOString().split('T')[0],
-		open_at_time: new Date().toTimeString().split(' ')[0].slice(0, 5),
-		close_at: new Date().toISOString().split('T')[0],
-		close_at_time: new Date().toTimeString().split(' ')[0].slice(0, 5),
-		fee_enabled: false,
+		name: '',
+		event_link: '',
+		open_date: new Date().toISOString().split('T')[0],
+		open_time: '00:00',
+		close_date: new Date().toISOString().split('T')[0],
+		close_time: '23:59',
 		fee_amount: null,
-		age_restriction_enabled: false,
 		min_age: null,
 		max_age: null
 	};
 
 	const handleSubmit = () => {
 		// Handle form submission logic here
+		userInput.fee_amount = fee_enabled ? userInput.fee_amount : null;
+		userInput.min_age = age_restriction_enabled ? userInput.min_age : null;
+		userInput.max_age = age_restriction_enabled ? userInput.max_age : null;
+
 		console.log('Form submitted with data:', userInput);
 
 		supabase.functions
-			.invoke('hello-world', {
-				body: JSON.stringify({ name: 'SvelteKit User' })
+			.invoke('new-event-create', {
+				body: JSON.stringify(userInput)
 			})
 			.then((response) => {
 				console.log('Function response:', response);
@@ -40,32 +45,47 @@
 		</div>
 
 		<div class="input-section">
-			<input type="text" placeholder="ชื่องาน" bind:value={userInput.title} />
+			<input type="text" placeholder="ชื่องาน" bind:value={userInput.name} />
 		</div>
 
 		<div class="input-section">
-			<input type="text" placeholder="ลิงก์งาน" bind:value={userInput.link} />
+			<input type="text" placeholder="ลิงก์งาน" bind:value={userInput.event_link} />
 		</div>
 
 		<div class="input-section">
-			<input type="date" id="start" name="open_at" bind:value={userInput.open_at} />
-			<input type="time" id="appt" name="open_at_time" bind:value={userInput.open_at_time} />
+			<input type="date" id="start" name="open_date" bind:value={userInput.open_date} />
+			<input type="time" id="appt" name="open_time" bind:value={userInput.open_time} />
 		</div>
 
 		<div class="input-section">
-			<input type="date" id="end" name="close_at" bind:value={userInput.close_at} />
-			<input type="time" id="appt" name="close_at_time" bind:value={userInput.close_at_time} />
+			<input type="date" id="end" name="close_date" bind:value={userInput.close_date} />
+			<input type="time" id="appt" name="close_time" bind:value={userInput.close_time} />
 		</div>
 
 		<div class="input-section">
-			<input type="checkbox" bind:checked={userInput.fee_enabled} />
-			<input type="number" placeholder="ค่าสมัคร" bind:value={userInput.fee_amount} />
+			<input type="checkbox" bind:checked={fee_enabled} />
+			<input
+				disabled={!fee_enabled}
+				type="number"
+				placeholder="ค่าสมัคร"
+				bind:value={userInput.fee_amount}
+			/>
 		</div>
 
 		<div class="input-section">
-			<input type="checkbox" bind:checked={userInput.age_restriction_enabled} />
-			<input type="number" placeholder="อายุต่ำสุด" bind:value={userInput.min_age} />
-			<input type="number" placeholder="อายุสูงสุด" bind:value={userInput.max_age} />
+			<input type="checkbox" bind:checked={age_restriction_enabled} />
+			<input
+				disabled={!age_restriction_enabled}
+				type="number"
+				placeholder="อายุต่ำสุด"
+				bind:value={userInput.min_age}
+			/>
+			<input
+				disabled={!age_restriction_enabled}
+				type="number"
+				placeholder="อายุสูงสุด"
+				bind:value={userInput.max_age}
+			/>
 		</div>
 
 		<div class="input-section">
