@@ -8,10 +8,10 @@
 		close_at: new Date().toISOString().split('T')[0],
 		close_at_time: new Date().toTimeString().split(' ')[0].slice(0, 5),
 		fee_enabled: false,
-		fee_amount: 0,
+		fee_amount: null,
 		age_restriction_enabled: false,
-		min_age: 0,
-		max_age: 0
+		min_age: null,
+		max_age: null
 	};
 </script>
 
