@@ -1,35 +1,14 @@
-import { supabase } from './supabaseClient';
-import type { User, Session } from '@supabase/supabase-js';
+import { writable } from "svelte/store";
+import { supabase } from "$lib/supabaseClient";
+import type { User } from "@supabase/supabase-js";
 
-class AuthState {
-	user = $state<User | null>(null);
-	session = $state<Session | null>(null);
+export const auth = writable<{ user: User | null }>({ user: null });
 
-	constructor() {
-		$effect.root(() => {
-			// Initialize
-			supabase.auth.getSession().then(({ data }) => {
-				this.session = data.session;
-				this.user = data.session?.user ?? null;
-			});
+// Initialize on mount
+supabase.auth.getSession().then(({ data: { session } }) => {
+	auth.set({ user: session?.user ?? null });
+});
 
-			// Listen for changes
-			const {
-				data: { subscription }
-			} = supabase.auth.onAuthStateChange((_event, session) => {
-				this.session = session;
-				this.user = session?.user ?? null;
-			});
-
-			return () => {
-				subscription.unsubscribe();
-			};
-		});
-	}
-
-	async signOut() {
-		await supabase.auth.signOut();
-	}
-}
-
-export const auth = new AuthState();
+supabase.auth.onAuthStateChange((event, session) => {
+	auth.set({ user: session?.user ?? null });
+});

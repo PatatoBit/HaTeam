@@ -102,7 +102,7 @@
 					<div class="upload-content">
 						<img src="/icons/cloud-upload.svg" alt="Upload" class="upload-icon" />
 						<span>อัปโหลดรูปภาพ</span>
-						<span class="recommendation">แนะนำอัตราส่วน 4:5</span>
+						<span class="recommendation">แนะนำความละเอียด 1080x1350 หรืออัตราส่วน 4:5</span>
 					</div>
 				{/if}
 			</label>

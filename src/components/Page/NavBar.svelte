@@ -13,7 +13,7 @@
 	};
 
 	const signOut = async () => {
-		await auth.signOut();
+		await supabase.auth.signOut();
 	};
 
 	let activeRoute = '';
@@ -33,9 +33,9 @@
 			<a href="/chat" class:active={activeRoute === '/chat'}>แชท</a>
 		</div>
 
-		{#if auth.user}
+		{#if $auth.user}
 			<div class="user-menu">
-				<span>{auth.user.email}</span>
+				<span>{$auth.user.email}</span>
 				<button class="signin" onclick={signOut}>ออกจากระบบ</button>
 			</div>
 		{:else}

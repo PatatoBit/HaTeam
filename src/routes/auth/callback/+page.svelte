@@ -4,24 +4,23 @@
 	import { supabase } from '$lib/supabaseClient';
 
 	onMount(async () => {
-		const { error } = await supabase.auth.getSession();
-		if (error) {
-			console.error('Error getting session:', error);
+		// implicit OAuth flow, getSession() reads the hash automatically
+		const {
+			data: { session },
+			error
+		} = await supabase.auth.getSession();
+
+		if (error || !session) {
+			console.error('Auth failed:', error);
+			goto('/login?error=auth_failed');
+			return;
 		}
-		// Redirect to home after handling callback
+
+		console.log('✅ Login success:', session.user.email);
 		goto('/');
 	});
 </script>
 
 <div class="callback">
-	<p>Generating session...</p>
+	<p>Completing login...</p>
 </div>
-
-<style>
-	.callback {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-	}
-</style>
