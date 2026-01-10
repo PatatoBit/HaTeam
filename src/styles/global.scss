@@ -69,3 +69,16 @@ input[type='text'] {
 	font-size: 1rem;
 	border: 1px solid var(--black);
 }
+
+button {
+	padding: 10px 15px;
+	border: none;
+	border-radius: 8px;
+	background-color: var(--primary);
+	color: #fff;
+	cursor: pointer;
+
+	&:active {
+		opacity: 0.8;
+	}
+}
