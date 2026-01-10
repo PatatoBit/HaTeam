@@ -5,21 +5,21 @@
 	let age_restriction_enabled = false;
 
 	let userInput = {
-		image: null,
-		name: '',
-		event_link: '',
+		image_url: null,
+		name: 'OEC Hackathon 2024',
+		event_link: 'https://www.hackathonthailand.com/oec',
 		open_date: new Date().toISOString().split('T')[0],
 		open_time: '00:00',
 		close_date: new Date().toISOString().split('T')[0],
 		close_time: '23:59',
-		fee_amount: null,
+		fee: null,
 		min_age: null,
 		max_age: null
 	};
 
 	const handleSubmit = () => {
 		// Handle form submission logic here
-		userInput.fee_amount = fee_enabled ? userInput.fee_amount : null;
+		userInput.fee = fee_enabled ? userInput.fee : null;
 		userInput.min_age = age_restriction_enabled ? userInput.min_age : null;
 		userInput.max_age = age_restriction_enabled ? userInput.max_age : null;
 
@@ -41,7 +41,7 @@
 <main class="create-event-page">
 	<div class="inputs">
 		<div class="input-section">
-			<input type="file" bind:value={userInput.image} />
+			<input type="file" bind:value={userInput.image_url} />
 		</div>
 
 		<div class="input-section">
@@ -68,7 +68,7 @@
 				disabled={!fee_enabled}
 				type="number"
 				placeholder="ค่าสมัคร"
-				bind:value={userInput.fee_amount}
+				bind:value={userInput.fee}
 			/>
 		</div>
 
