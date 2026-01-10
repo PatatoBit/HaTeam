@@ -63,13 +63,22 @@ select {
 	border: 1px solid var(--black);
 }
 
-input[type='text'] {
-	padding: 8px 12px;
-	font-size: 1rem;
-	border: 1px solid var(--black);
+input[type='text'],
+input[type='date'],
+input[type='time'],
+input[type='number'] {
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 0.25rem;
 }
 
-button {
+input[type='file'] {
+	border: none;
+	cursor: pointer;
+}
+
+button,
+input[type='submit'] {
 	font-family: 'Noto Sans Thai', sans-serif;
 	padding: 10px 15px;
 	border: none;
