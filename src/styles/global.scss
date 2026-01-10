@@ -52,8 +52,7 @@ p {
 
 select,
 input,
-textarea,
-button {
+textarea {
 	font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
 }
 
@@ -71,6 +70,7 @@ input[type='text'] {
 }
 
 button {
+	font-family: 'Noto Sans Thai', sans-serif;
 	padding: 10px 15px;
 	border: none;
 	border-radius: 8px;
