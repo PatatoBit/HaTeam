@@ -10,27 +10,27 @@ console.log("new event create function loaded");
 
 Deno.serve(async (req) => {
   const {
-    image,
+    image_url,
     name,
     event_link,
     open_date,
     open_time,
     close_date,
     close_time,
-    fee_amount,
+    fee,
     min_age,
     max_age,
   } = await req.json();
 
   console.log("Request received with data:", {
-    image,
+    image_url,
     name,
     event_link,
     open_date,
     open_time,
     close_date,
     close_time,
-    fee_amount,
+    fee,
     min_age,
     max_age,
   });
@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
       url: event_link,
       open_at: `${open_date}T${open_time}`,
       close_at: `${close_date}T${close_time}`,
-      cost: fee_amount,
+      fee,
       min_age,
       max_age,
     },
