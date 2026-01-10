@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { supabase } from '$lib/supabaseClient';
 	import { auth } from '$lib/auth.svelte';
-	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	const signIn = async () => {
 		supabase.auth.signInWithOAuth({
@@ -15,22 +15,14 @@
 	const signOut = async () => {
 		await supabase.auth.signOut();
 	};
-
-	let activeRoute = '';
-
-	onMount(() => {
-		activeRoute = window.location.pathname;
-	});
-
-	$: activeRoute;
 </script>
 
 <nav class="nav">
 	<div class="wrapper">
 		<div class="tabs">
-			<a href="/create" class:active={activeRoute === '/create'}>ลงอีเวนท์ใหม่</a>
-			<a href="/" class:active={activeRoute === '/'}>ค้นหา</a>
-			<a href="/chat" class:active={activeRoute === '/chat'}>แชท</a>
+			<a href="/create" class:active={$page.url.pathname === '/create'}>ลงอีเวนท์ใหม่</a>
+			<a href="/" class:active={$page.url.pathname === '/'}>ค้นหา</a>
+			<a href="/chat" class:active={$page.url.pathname === '/chat'}>แชท</a>
 		</div>
 
 		{#if $auth.user}
