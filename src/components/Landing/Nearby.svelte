@@ -31,9 +31,14 @@
 	}
 
 	.post-image {
+		margin-bottom: 1rem;
 		width: 100%;
 		height: auto;
 		background-color: grey;
 		aspect-ratio: 0.7;
+	}
+
+	.post {
+		padding: 0.5rem 0;
 	}
 </style>
