@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { supabase } from '$lib/supabaseClient';
 
 	let fee_enabled = false;
@@ -15,6 +15,43 @@
 		fee: null,
 		min_age: null,
 		max_age: null
+	};
+
+	let previewUrl: string | null = null;
+	let isDragging = false;
+
+	const handleFiles = (files: FileList | any[]) => {
+		if (files && files.length > 0) {
+			const file = files[0];
+			if (file.type.startsWith('image/')) {
+				previewUrl = URL.createObjectURL(file);
+			}
+		}
+	};
+
+	const onDrop = (e: DragEvent) => {
+		e.preventDefault();
+		isDragging = false;
+		if (e.dataTransfer && e.dataTransfer.files) {
+			handleFiles(Array.from(e.dataTransfer.files));
+		}
+	};
+
+	const onDragOver = (e: DragEvent) => {
+		e.preventDefault();
+		isDragging = true;
+	};
+
+	const onDragLeave = (e: DragEvent) => {
+		e.preventDefault();
+		isDragging = false;
+	};
+
+	const onPaste = (e: ClipboardEvent) => {
+		if (e.clipboardData && e.clipboardData.files.length > 0) {
+			e.preventDefault();
+			handleFiles(Array.from(e.clipboardData.files));
+		}
 	};
 
 	const handleSubmit = () => {
@@ -38,10 +75,37 @@
 	};
 </script>
 
+<svelte:window onpaste={onPaste} />
+
 <main class="create-event-page">
 	<div class="inputs">
 		<div class="input-section">
-			<input type="file" bind:value={userInput.image_url} />
+			<label
+				class="file-upload"
+				class:dragging={isDragging}
+				ondrop={onDrop}
+				ondragover={onDragOver}
+				ondragleave={onDragLeave}
+			>
+				<input
+					type="file"
+					hidden
+					accept="image/*"
+					onchange={(e) =>
+						e.target instanceof HTMLInputElement && e.target.files && handleFiles(e.target.files)}
+				/>
+				{#if previewUrl}
+					<div class="upload-preview">
+						<img src={previewUrl} alt="Preview" />
+					</div>
+				{:else}
+					<div class="upload-content">
+						<img src="/icons/cloud-upload.svg" alt="Upload" class="upload-icon" />
+						<span>อัปโหลดรูปภาพ</span>
+						<span class="recommendation">แนะนำอัตราส่วน 4:5</span>
+					</div>
+				{/if}
+			</label>
 		</div>
 
 		<div class="input-section">
@@ -147,5 +211,59 @@
 
 	.submit-btn {
 		width: 100%;
+	}
+
+	.file-upload {
+		flex: 1;
+		cursor: pointer;
+		border: 2px dashed #ccc;
+		border-radius: 0.5rem;
+		padding: 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: border-color 0.2s;
+		background-color: #f9f9f9;
+
+		&:hover,
+		&.dragging {
+			border-color: #666;
+			background-color: #f0f0f0;
+		}
+	}
+
+	.upload-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		color: #666;
+		font-size: 0.9rem;
+	}
+
+	.recommendation {
+		font-size: 0.8rem;
+		color: #999;
+	}
+
+	.upload-preview {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			max-height: 300px;
+		}
+	}
+
+	.upload-icon {
+		width: 32px;
+		height: 32px;
+		opacity: 0.6;
 	}
 </style>
