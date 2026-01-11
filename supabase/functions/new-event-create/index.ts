@@ -43,9 +43,9 @@ Deno.serve(async (req) => {
   // Insert the new event into the "events" table
   const { error } = await supabase.from("events").insert([
     {
-      image_url: "https://placehold.co/400x500",
+      image_url,
       name,
-      url: event_link,
+      event_link,
       open_at: `${open_date}T${open_time}`,
       close_at: `${close_date}T${close_time}`,
       fee,

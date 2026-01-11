@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { supabase } from '$lib/supabaseClient';
+</script>
+
 <div class="wrapper">
 	<h2>ใกล้ตัว</h2>
 

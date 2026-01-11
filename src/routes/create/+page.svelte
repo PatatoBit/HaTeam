@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { auth } from '$lib/auth.svelte';
 	import { supabase } from '$lib/supabaseClient';
 
 	let fee_enabled = false;
 	let age_restriction_enabled = false;
 
+	// File uploading
+	let fileUploading: boolean = false;
+	let image_url: string | null = null;
+
 	let userInput = {
-		image_url: null,
+		image_url: '',
 		name: 'OEC Hackathon 2024',
 		event_link: 'https://www.hackathonthailand.com/oec',
 		open_date: new Date().toISOString().split('T')[0],
@@ -20,11 +25,36 @@
 	let previewUrl: string | null = null;
 	let isDragging = false;
 
-	const handleFiles = (files: FileList | any[]) => {
+	const handleFiles = async (files: FileList | any[]) => {
 		if (files && files.length > 0) {
 			const file = files[0];
 			if (file.type.startsWith('image/')) {
 				previewUrl = URL.createObjectURL(file);
+
+				// Upload to Supabase Storage
+				fileUploading = true;
+
+				if (!$auth.user) {
+					console.error('User not authenticated');
+					return;
+				}
+
+				const path = `posters/${$auth.user.id}/${crypto.randomUUID()}.jpg`;
+
+				const { data, error } = await supabase.storage.from('posters').upload(path, file, {
+					cacheControl: '3600',
+					upsert: false,
+					contentType: file.type
+				});
+
+				if (!error) {
+					image_url = supabase.storage.from('posters').getPublicUrl(path).data.publicUrl;
+				} else {
+					console.error('Upload error:', error);
+				}
+
+				console.log(`Image URL: ${image_url}`);
+				fileUploading = false;
 			}
 		}
 	};
@@ -60,6 +90,13 @@
 		userInput.min_age = age_restriction_enabled ? userInput.min_age : null;
 		userInput.max_age = age_restriction_enabled ? userInput.max_age : null;
 
+		if (image_url) {
+			userInput.image_url = image_url;
+		} else {
+			alert('กรุณาอัปโหลดรูปภาพงานก่อนส่งแบบฟอร์ม');
+			return;
+		}
+
 		console.log('Form submitted with data:', userInput);
 
 		supabase.functions
@@ -78,7 +115,7 @@
 <svelte:window onpaste={onPaste} />
 
 <main class="create-event-page">
-	<div class="inputs">
+	<form class="inputs">
 		<div class="input-section">
 			<label
 				class="file-upload"
@@ -91,6 +128,7 @@
 					type="file"
 					hidden
 					accept="image/*"
+					required
 					onchange={(e) =>
 						e.target instanceof HTMLInputElement && e.target.files && handleFiles(e.target.files)}
 				/>
@@ -160,7 +198,7 @@
 				onclick={async () => await handleSubmit()}
 			/>
 		</div>
-	</div>
+	</form>
 
 	<div class="editor"></div>
 </main>
